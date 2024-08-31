@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <h2>Student List</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Percentage</th>
+        </tr>
+       <tr th:each="student : ${listStudents}">
+
+            <td th:text="${student.sid}"></td>
+            <td th:text="${student.sname}"></td>
+            <td th:text="${student.scity}"></td>
+            <td th:text="${student.spercentage}"></td>
+        </tr>
+    </table>
+</body>
+</html>
