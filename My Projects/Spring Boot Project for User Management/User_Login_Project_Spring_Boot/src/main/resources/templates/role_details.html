@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Role Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Role Details</h2>
+        <dl class="row">
+            <dt class="col-sm-3">Role ID:</dt>
+            <dd class="col-sm-9" th:text="${role.roleId}"></dd>
+            <dt class="col-sm-3">Role Name:</dt>
+            <dd class="col-sm-9" th:text="${role.roleName}"></dd>
+        </dl>
+        <a href="/getAllUsers" class="btn btn-secondary">Back to User List</a>
+    </div>
+</body>
+</html>

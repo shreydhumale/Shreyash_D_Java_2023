@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>User Details</h2>
+        <dl class="row">
+            <dt class="col-sm-3">User ID:</dt>
+            <dd class="col-sm-9" th:text="${user.user_id}"></dd>
+            <dt class="col-sm-3">Username:</dt>
+            <dd class="col-sm-9" th:text="${user.username}"></dd>
+            <dt class="col-sm-3">Password:</dt>
+            <dd class="col-sm-9" th:text="${user.user_password}"></dd>
+            <dt class="col-sm-3">Full Name:</dt>
+            <dd class="col-sm-9" th:text="${user.user_details.full_name}"></dd>
+            <dt class="col-sm-3">Address:</dt>
+            <dd class="col-sm-9" th:text="${user.user_details.address}"></dd>
+            <dt class="col-sm-3">Role Name:</dt>
+            <dd class="col-sm-9" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></dd>
+            <dt class="col-sm-3">Role ID:</dt>
+            <dd class="col-sm-9" th:text="${user.role != null ? user.role.roleId : 'N/A'}"></dd>
+        </dl>
+        <a href="/getAllUsers" class="btn btn-secondary">Back to User List</a>
+    </div>
+</body>
+</html>
