@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        form { display: inline-block; text-align: left; }
+        input, button { display: block; margin: 10px 0; padding: 10px; width: 250px; }
+    </style>
+</head>
+<body>
+    <h2>User Login</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.html">Register here</a></p>
+
+    <script>
+		document.getElementById('loginForm').addEventListener('submit', function(e) {
+		    e.preventDefault();
+
+		    const user = {
+		        username: document.getElementById('username').value,
+		        password: document.getElementById('password').value
+		    };
+
+		    fetch("http://localhost:8081/api/auth/login", {  
+		        method: "POST",
+		        headers: { 
+		            "Content-Type": "application/json"
+		        },
+		        body: JSON.stringify(user)  
+		    })
+		    .then(response => {
+		        console.log("Response status:", response.status);
+		        return response.json(); 
+		    })
+		    .then(data => {
+		        console.log("Response Data:", data);
+		        alert(data.message); 
+
+		        if (data.message.includes("successful")) {
+		            localStorage.setItem("username", user.username);
+		            window.location.href = "dashboard.html"; 
+		        }
+		    })
+		    .catch(error => {
+		        console.error("Error:", error);
+		        alert("Login failed. Check console for details.");
+		    });
+		});
+
+    </script>
+</body>
+</html>

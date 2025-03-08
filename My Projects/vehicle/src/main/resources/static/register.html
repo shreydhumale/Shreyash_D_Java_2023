@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        form { display: inline-block; text-align: left; }
+        input, select, button { display: block; margin: 10px 0; padding: 10px; width: 250px; }
+    </style>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <select id="role">
+            <option value="OWNER">Owner</option>
+            <option value="ADMIN">Admin</option>
+            <option value="ADJUSTER">Adjuster</option>
+        </select>
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+
+    <script>
+		document.getElementById('registerForm').addEventListener('submit', function(e) {
+		    e.preventDefault();  
+
+		    const user = {
+		        username: document.getElementById('username').value,
+		        password: document.getElementById('password').value,
+		        role: document.getElementById('role').value
+		    };
+
+		    console.log("Sending request:", user); 
+			fetch("http://localhost:8081/api/auth/register", { 
+			    method: "POST",
+			    headers: { 
+			        "Content-Type": "application/json"
+			    },
+			    body: JSON.stringify({
+			        username: document.getElementById('username').value,
+			        password: document.getElementById('password').value,
+			        role: document.getElementById('role').value
+			    })
+			})
+
+		    .then(response => {
+		        if (!response.ok) {
+		            throw new Error("HTTP error! Status: " + response.status);
+		        }
+		        return response.text();
+		    })
+		    .then(data => {
+		        console.log("Response:", data);
+		        alert(data);
+		        if (data.includes("successfully")) {
+		            window.location.href = "login.html";
+		        }
+		    })
+		    .catch(error => {
+		        console.error("Error", error);
+		        alert("Registration failed. Check console for details.");
+		    });
+		});
+
+	</script>
+</body>
+</html>
