@@ -1,9 +1,10 @@
 package com.example.vehicle.controller;
 
 import com.example.vehicle.model.User;
+import com.example.vehicle.service.UserService;
 import com.example.vehicle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,41 +13,46 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api/auth")  
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
-    
+    private UserService userService;  // ✅ Use UserService (not UserRepository)
+
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;  // ✅ Inject PasswordEncoder
 
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
+        System.out.println("Received registration request: " + user.getUsername());
+
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
             return "Username already exists!";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
-        userRepository.save(user);
+        userService.saveUser(user);  // ✅ Save user using UserService (hashes password)
         return "User " + user.getUsername() + " registered successfully!";
     }
+
 
     @PostMapping("/login")
     public Map<String, String> loginUser(@RequestBody User user) {
         Optional<User> foundUser = userRepository.findByUsername(user.getUsername());
 
         Map<String, String> response = new HashMap<>();
-
-        if (foundUser.isPresent() && foundUser.get().getPassword().equals(user.getPassword())) {
+        if (foundUser.isPresent() && passwordEncoder.matches(user.getPassword(), foundUser.get().getPassword())) { 
             response.put("message", "Login successful");
-            response.put("username", user.getUsername());
+            response.put("username", foundUser.get().getUsername());
+            response.put("role", foundUser.get().getRole()); // ✅ Ensure role is sent
         } else {
             response.put("message", "Invalid username or password");
         }
-
-        return response; 
- 
+        return response;
     }
+
+
 }

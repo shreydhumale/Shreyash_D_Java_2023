@@ -16,7 +16,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String role; // OWNER, ADMIN, ADJUSTER
+    private String role; 
 
 	public User() {
 		super();
