@@ -8,6 +8,5 @@ import java.util.List;
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
     List<Claim> findByUser(User user);
 
-    // ✅ Fetch claims by status (PENDING, APPROVED, REJECTED)
     List<Claim> findByClaimStatus(String status);
 }

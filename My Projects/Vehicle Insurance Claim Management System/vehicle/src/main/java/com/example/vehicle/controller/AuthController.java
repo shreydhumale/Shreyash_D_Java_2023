@@ -17,13 +17,13 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-    private UserService userService;  // ✅ Use UserService (not UserRepository)
+    private UserService userService;  
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // ✅ Inject PasswordEncoder
+    private PasswordEncoder passwordEncoder;  
 
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
@@ -34,7 +34,7 @@ public class AuthController {
             return "Username already exists!";
         }
 
-        userService.saveUser(user);  // ✅ Save user using UserService (hashes password)
+        userService.saveUser(user); 
         return "User " + user.getUsername() + " registered successfully!";
     }
 
@@ -47,7 +47,7 @@ public class AuthController {
         if (foundUser.isPresent() && passwordEncoder.matches(user.getPassword(), foundUser.get().getPassword())) { 
             response.put("message", "Login successful");
             response.put("username", foundUser.get().getUsername());
-            response.put("role", foundUser.get().getRole()); // ✅ Ensure role is sent
+            response.put("role", foundUser.get().getRole()); 
         } else {
             response.put("message", "Invalid username or password");
         }

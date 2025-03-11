@@ -15,8 +15,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // ✅ Inject BCrypt Encoder
-
+    private PasswordEncoder passwordEncoder;  
     @Transactional
     public User saveUser(User user) {
         System.out.println("Original Password: " + user.getPassword());
