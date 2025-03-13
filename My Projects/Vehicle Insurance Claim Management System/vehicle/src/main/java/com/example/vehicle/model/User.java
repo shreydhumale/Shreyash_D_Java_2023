@@ -17,19 +17,31 @@ public class User {
 
     @Column(nullable = false)
     private String role; 
+    
+    @Column(nullable = true)
+    private String email;
+    
+    @Column(nullable = true)
+    private String phone;
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(Long id, String username, String password, String role) {
+
+
+	public User(Long id, String username, String password, String role, String email, String phone) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
+		this.email = email;
+		this.phone = phone;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -62,6 +74,22 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-    
-    
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
+
 }

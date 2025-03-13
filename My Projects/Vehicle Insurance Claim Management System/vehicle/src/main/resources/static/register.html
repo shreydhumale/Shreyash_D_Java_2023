@@ -75,6 +75,8 @@
         <h2>📝 User Registration</h2>
         <form id="registerForm">
             <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
             <input type="password" id="password" placeholder="Password" required>
             <select id="role">
                 <option value="OWNER">Owner</option>
@@ -93,6 +95,8 @@
 
             const user = {
                 username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
                 password: document.getElementById('password').value,
                 role: document.getElementById('role').value
             };

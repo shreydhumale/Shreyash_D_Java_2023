@@ -18,11 +18,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // ✅ Disable CSRF for API calls
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Enable CORS
+            .csrf(csrf -> csrf.disable()) 
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // ✅ Allow register & login API
-                .requestMatchers("/api/claims/**").permitAll() // ✅ Allow register & login API
+                .requestMatchers("/api/auth/**").permitAll() 
+                .requestMatchers("/api/claims/**").permitAll() 
                 .anyRequest().authenticated()
             );
 
@@ -37,10 +37,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500")); // ✅ Allow frontend
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // ✅ Allow all HTTP methods
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // ✅ Allow headers
-        configuration.setAllowCredentials(true); // ✅ Allow credentials (cookies, authentication)
+        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500")); 
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); 
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); 
+        configuration.setAllowCredentials(true); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

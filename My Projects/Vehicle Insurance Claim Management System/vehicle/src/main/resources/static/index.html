@@ -3,81 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Vehicle Insurance System</title>
+    <title>Vehicle Insurance Claim Management</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
+
         body {
-            background: linear-gradient(to right, #007bff, #0056b3);
+            background-color: rgb(212, 212, 212);
+            color: #2c3e50;
+        }
+
+        header {
+            background: linear-gradient(to right, #3a7bd5, #4f94d4);
             color: white;
+            padding: 20px;
             text-align: center;
-            padding: 50px;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background: #4f94d4;
+            padding: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .container {
-            max-width: 500px;
-            padding: 30px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 20px;
-            font-size: 18px;
+
+        nav a {
             color: white;
-            background: #007bff;
             text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s ease-in-out;
-            box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+            padding: 12px 18px;
+            font-size: 1.1em;
+            transition: 0.3s;
         }
-        .btn:hover {
-            background: #0056b3;
-            transform: scale(1.05);
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
         }
-        .btn-secondary {
-            background: #28a745;
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('insurance-bg.jpg') no-repeat center center/cover;
+            color: #2c3e50;
+            font-size: 1.2em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        .btn-secondary:hover {
-            background: #218838;
+
+        .container {
+            text-align: center;
+            padding: 50px;
+            background-color: rgb(219, 237, 255);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            width: 80%;
         }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .feature-box {
+            background: #eaf2ff;
+            padding: 25px;
+            width: 45%;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
+            transition: 0.3s;
+        }
+
+        .feature-box:hover {
+            background: #d6e4ff;
+            transform: translateY(-5px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to right, #3a7bd5, #4f94d4);
+            color: white;
+            font-size: 0.9em;
+            margin-top: 30px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+		
     </style>
 </head>
+
 <body>
+    <header>
+        Vehicle Insurance Claim Management
+    </header>
 
-    <div class="container">
-        <h1>🚗 Welcome to the Vehicle Insurance System</h1>
-        <p>Submit and track your insurance claims with ease.</p>
+    <nav>
+        <a href="#">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="#contact">Contact</a>
+    </nav>
 
-        <a href="login.html" class="btn">Login</a>
-        <a href="register.html" class="btn btn-secondary">Register</a>
+    <div class="hero">
+        <h1>Secure & Fast Insurance Claims</h1>
+        <p>Submit your claims online and get updates instantly.</p>
     </div>
 
-    <script>
-        // ✅ Redirect to Dashboard if already logged in
-        if (localStorage.getItem("username")) {
-            window.location.href = "dashboard.html";
-        }
-    </script>
+    <div class="container">
+        <h2>Our Services</h2>
+        <div class="features">
+            <div class="feature-box">
+                <h3>File a Claim Easily</h3>
+                <p>Submit your insurance claims online with a simple process.</p>
+            </div>
+            <div class="feature-box">
+                <h3>Admin & Adjuster Portal</h3>
+                <p>Manage claims efficiently through a dedicated portal.</p>
+            </div>
+        </div>
+    </div>
 
+    <div class="footer" id="contact">
+        <p>Contact Us: support@vehicleclaims.com | +91 98765 43210</p>
+        <p>&copy; 2025 Vehicle Insurance Claim Management</p>
+    </div>
 </body>
 </html>
