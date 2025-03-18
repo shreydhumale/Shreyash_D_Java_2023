@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Banking App</title>
+    <link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="css/global.css">
+
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const loginData = {
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            };
+
+            fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || "Login failed"); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                localStorage.setItem("id", data.id);
+                localStorage.setItem("email", data.email);
+                localStorage.setItem("role", data.role);
+                window.location.href = "dashboard.html";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Login Failed: " + error.message);
+            });
+        });
+    </script>
+
+</body>
+</html>

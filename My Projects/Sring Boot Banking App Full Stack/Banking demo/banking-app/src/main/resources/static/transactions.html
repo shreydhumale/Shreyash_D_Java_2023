@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Banking App</title>
+    <link rel="stylesheet" href="css/transactions.css">
+	<link rel="stylesheet" href="css/global.css">
+
+</head>
+<body>
+
+    <div class="transactions-container">
+        <h2>Deposit / Withdraw</h2>
+
+        <input type="number" id="amount" placeholder="Enter Amount">
+        <div class="btn-group">
+            <button onclick="deposit()" class="btn btn-deposit">Deposit</button>
+            <button onclick="withdraw()" class="btn btn-withdraw">Withdraw</button>
+        </div>
+
+        <a href="dashboard.html" class="btn btn-back">🔙 Back to Dashboard</a>
+
+        <h2>Transaction History</h2>
+        <div id="transactionsList" class="transactions-list"></div>
+    </div>
+
+    <script>
+        const id = localStorage.getItem("id");
+
+        function deposit() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid amount!");
+                return;
+            }
+
+            fetch(`http://localhost:8080/api/accounts/${id}/deposit`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(amount)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Deposit Successful! New Balance: $${data.balance.toFixed(2)}`);
+                document.getElementById("amount").value = "";
+                loadTransactions();
+            })
+            .catch(error => alert("Deposit Failed: " + error.message));
+        }
+
+        function withdraw() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid amount!");
+                return;
+            }
+
+            fetch(`http://localhost:8080/api/accounts/${id}/withdraw`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(amount)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Withdrawal Successful! New Balance: $${data.balance.toFixed(2)}`);
+                document.getElementById("amount").value = "";
+                loadTransactions();
+            })
+            .catch(error => alert("Withdrawal Failed: " + error.message));
+        }
+
+        function loadTransactions() {
+            fetch(`http://localhost:8080/api/transactions/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const transactionsList = document.getElementById("transactionsList");
+                transactionsList.innerHTML = "";
+
+                if (data.length === 0) {
+                    transactionsList.innerHTML = "<p>No transactions found.</p>";
+                } else {
+                    data.forEach(txn => {
+                        const txnDiv = document.createElement("div");
+                        txnDiv.className = `txn-item ${txn.type.toLowerCase()}`;
+                        txnDiv.innerHTML = `
+                            <p><strong>${txn.type}:</strong> $${txn.amount} | ${new Date(txn.timestamp).toLocaleString()}</p>
+                        `;
+                        transactionsList.appendChild(txnDiv);
+                    });
+                }
+            })
+            .catch(error => console.error("Error loading transactions:", error));
+        }
+
+        document.addEventListener("DOMContentLoaded", loadTransactions);
+    </script>
+
+</body>
+</html>

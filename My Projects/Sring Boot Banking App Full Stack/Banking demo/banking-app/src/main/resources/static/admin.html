@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Banking App</title>
+    <link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/global.css">
+
+</head>
+<body>
+
+    <div class="admin-container">
+        <h2>Admin Panel</h2>
+
+        <div class="btn-group">
+            <button onclick="logout()" class="btn btn-danger">Logout</button>
+            <a href="dashboard.html" class="btn btn-back">🔙 Back to Dashboard</a>
+        </div>
+
+        <h3>All Users</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Account Holder</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Balance</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+        </table>
+
+        <h3>User Transactions</h3>
+        <div id="transactionsList" class="transactions-list"></div>
+    </div>
+
+    <script>
+        function loadUsers() {
+            fetch("http://localhost:8080/api/admin/users")
+            .then(response => response.json())
+            .then(data => {
+                const userTable = document.getElementById("userTable");
+                userTable.innerHTML = "";
+
+                data.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.accountHolderName}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>$${user.balance}</td>
+                        <td>
+                            <button onclick="viewTransactions(${user.id})" class="btn btn-view">View Transactions</button>
+                            <button onclick="deleteUser(${user.id})" class="btn btn-delete">Delete</button>
+                        </td>
+                    `;
+                    userTable.appendChild(row);
+                });
+            })
+            .catch(error => console.error("Error loading users:", error));
+        }
+
+        function viewTransactions(id) {
+            fetch(`http://localhost:8080/api/transactions/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const transactionsList = document.getElementById("transactionsList");
+                transactionsList.innerHTML = `<h4>Transactions for User ID: ${id}</h4>`;
+
+                if (data.length === 0) {
+                    transactionsList.innerHTML += "<p>No transactions found.</p>";
+                } else {
+                    data.forEach(txn => {
+                        const txnDiv = document.createElement("div");
+                        txnDiv.className = `txn-item ${txn.type.toLowerCase()}`;
+                        txnDiv.innerHTML = `
+                            <p><strong>${txn.type}:</strong> $${txn.amount} | ${new Date(txn.timestamp).toLocaleString()}</p>
+                        `;
+                        transactionsList.appendChild(txnDiv);
+                    });
+                }
+            })
+            .catch(error => console.error("Error loading transactions:", error));
+        }
+
+        function deleteUser(userId) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                fetch(`http://localhost:8080/api/admin/users/${userId}`, {
+                    method: "DELETE"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadUsers(); // ✅ Refresh user list
+                })
+                .catch(error => alert("Error deleting user: " + error.message));
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadUsers);
+    </script>
+
+</body>
+</html>

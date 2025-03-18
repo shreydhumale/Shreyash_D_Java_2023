@@ -1,0 +1,151 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+/* Body Styling */
+body {
+    background: url('/images/background.jpg') no-repeat center center/cover;
+    background-attachment: fixed; /* Prevent background from scrolling */
+    min-height: 100vh;
+    overflow-y: auto;  /* Enable page scrolling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* Admin Container */
+.admin-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Headings */
+h2 {
+    color: #004080;
+    margin-bottom: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+    color: #333;
+}
+
+/* Buttons */
+.btn-group {
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+/* Logout Button */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Back to Dashboard Button */
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+/* Action Buttons */
+.btn-view {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-view:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Transactions List */
+.transactions-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* Transaction Items */
+.txn-item {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Deposit Transactions */
+.txn-item.deposit {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+
+/* Withdraw Transactions */
+.txn-item.withdraw {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}

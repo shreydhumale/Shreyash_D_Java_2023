@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Banking App</title>
+    <link rel="stylesheet" href="css/register.css">
+	<link rel="stylesheet" href="css/global.css">
+
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" id="accountHolderName" placeholder="Full Name" required>
+            <small class="error" id="nameError"></small>
+
+            <input type="email" id="email" placeholder="Email" required>
+            <small class="error" id="emailError"></small>
+
+            <input type="password" id="password" placeholder="Password" required>
+            <small class="error" id="passwordError"></small>
+
+            <select id="role">
+                <option value="USER">User</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+
+            <input type="text" id="contactNumber" placeholder="Contact Number" required>
+            <small class="error" id="contactError"></small>
+
+            <input type="number" id="balance" placeholder="Initial Balance" required>
+            <small class="error" id="balanceError"></small>
+
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            clearErrors();
+
+            const accountHolderName = document.getElementById("accountHolderName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const role = document.getElementById("role").value;
+            const contactNumber = document.getElementById("contactNumber").value.trim();
+            const balance = parseFloat(document.getElementById("balance").value);
+
+            // ✅ Client-side Validation
+            let isValid = true;
+
+            if (accountHolderName === "") {
+                document.getElementById("nameError").textContent = "Full Name is required";
+                isValid = false;
+            }
+
+            if (email === "" || !email.includes("@")) {
+                document.getElementById("emailError").textContent = "Enter a valid email";
+                isValid = false;
+            }
+
+            if (password.length < 6) {
+                document.getElementById("passwordError").textContent = "Password must be at least 6 characters";
+                isValid = false;
+            }
+
+            if (contactNumber.length < 10 || isNaN(contactNumber)) {
+                document.getElementById("contactError").textContent = "Enter a valid 10-digit number";
+                isValid = false;
+            }
+
+            if (isNaN(balance) || balance < 0) {
+                document.getElementById("balanceError").textContent = "Enter a valid initial balance";
+                isValid = false;
+            }
+
+            if (!isValid) return; // Stop if validation fails
+
+            const user = {
+                accountHolderName,
+                email,
+                password,
+                role,
+                contactNumber,
+                balance
+            };
+
+            console.log("Sending user data:", user); // Debugging
+
+            fetch("http://localhost:8080/api/accounts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Account Created Successfully!");
+                window.location.href = "login.html";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Registration failed: " + error.message);
+            });
+        });
+
+        function clearErrors() {
+            document.querySelectorAll(".error").forEach(el => el.textContent = "");
+        }
+    </script>
+</body>
+</html>

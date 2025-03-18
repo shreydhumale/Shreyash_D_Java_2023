@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Banking App</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+	<link rel="stylesheet" href="css/global.css">
+
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h1>Welcome, <span id="accountHolderName"></span></h1>
+        <p>Email: <span id="email"></span></p>
+        <p>Balance: <strong>$<span id="balance"></span></strong></p>
+        
+        <div class="buttons">
+            <a href="transactions.html" class="btn btn-primary">Deposit / Withdraw</a>
+            <button onclick="logout()" class="btn btn-danger">Logout</button>
+        </div>
+        
+        <div id="adminPanel" class="admin-panel" style="display: none;">
+            <h3>Admin Dashboard</h3>
+            <a href="admin.html" class="btn btn-admin">Manage Users & Transactions</a>
+        </div>
+    </div>
+
+    <script>
+        function loadUserDetails() {
+            const id = localStorage.getItem("id");
+            const role = localStorage.getItem("role");
+
+            if (!id) {
+                alert("You are not logged in!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            fetch(`http://localhost:8080/api/accounts/${id}`)
+            .then(response => {
+                if (response.status === 404) {
+                    throw new Error("User not found.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("accountHolderName").innerText = data.accountHolderName;
+                document.getElementById("email").innerText = data.email;
+                document.getElementById("balance").innerText = data.balance.toFixed(2);
+
+                if (role === "ADMIN") {
+                    document.getElementById("adminPanel").style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching user details:", error);
+                alert("Error: " + error.message);
+            });
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadUserDetails);
+    </script>
+
+</body>
+</html>
