@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form with Star Rating</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow: hidden;
+            background: #b0c4dd6b;
+            
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .rating-container {
+            margin: 20px 0;
+        }
+        .stars {
+            font-size: 32px;
+            cursor: pointer;
+        }
+        .star {
+            color: #ddd;
+            transition: color 0.2s;
+        }
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+        }
+        .btn-submit {
+            background: #a062de;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background: #4b2994;
+        }
+        .btn-submit:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .header-content{
+            background: linear-gradient(45deg, rgb(228, 231, 253), #726ae0, #b882c9, #7836d4);
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" id="feedback">
+        <div class="header-content">
+            <h1>Share Your Feedback</h1>
+            <p>We value your opinion and would love to hear from you</p>
+        </div>
+    </header>
+    <h1>Feedback Form</h1>
+    <form id="feedbackForm" class="feedback-form">
+        <div class="form-group">
+            <input type="text" id="firstName" placeholder="First Name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <input type="text" id="lastName" placeholder="Last Name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <input type="email" id="email" placeholder="Email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <input type="tel" id="phone" placeholder="Phone" class="form-control">
+        </div>
+        
+        <!-- Star Rating System -->
+        <div class="form-group rating-container">
+            <label>Rate your experience:</label>
+            <div class="stars">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+            <input type="hidden" id="rating" name="rating" value="0">
+            <div id="rating-text" style="margin-top: 5px; color: #666;"></div>
+        </div>
+        
+        <div class="form-group">
+            <textarea id="feedbackText" placeholder="Your feedback" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Feedback</button>
+    </form>
+
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init('Ano1AEqyh29pYyeAW'); // Replace with your actual public key
+        })();
+
+        // Star Rating Functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const ratingText = document.getElementById('rating-text');
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                ratingInput.value = value;
+                
+                // Update star display
+                stars.forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+                
+                // Update rating text
+                const ratingMessages = [
+                    "",
+                    "Poor",
+                    "Fair",
+                    "Good",
+                    "Very Good",
+                    "Excellent"
+                ];
+                ratingText.textContent = ratingMessages[value];
+            });
+            
+            // Hover effects
+            star.addEventListener('mouseover', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                stars.forEach((s, index) => {
+                    if (index < value) {
+                        s.style.color = "#ffc107";
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                const currentRating = parseInt(ratingInput.value);
+                stars.forEach((s, index) => {
+                    if (index >= currentRating) {
+                        s.style.color = "#ddd";
+                    }
+                });
+            });
+        });
+
+        // Form submission handler
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Validate rating
+            if (ratingInput.value === "0") {
+                alert("Please select a rating");
+                return;
+            }
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending...";
+            
+            const params = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim() || 'Not provided',
+                rating: ratingInput.value,
+                feedbackText: document.getElementById('feedbackText').value.trim(),
+                date: new Date().toLocaleString()
+            };
+
+            emailjs.send('service_wzok44q', 'template_wpcl1sq', params)
+                .then(function() {
+                    alert('Thank you for your feedback!');
+                    document.getElementById('feedbackForm').reset();
+                    
+                    // Reset stars
+                    stars.forEach(star => {
+                        star.classList.remove('active');
+                        star.style.color = "#ddd";
+                    });
+                    ratingInput.value = "0";
+                    ratingText.textContent = "";
+                })
+                .catch(function(error) {
+                    console.error('Failed to send feedback:', error);
+                    alert('Failed to send feedback. Please try again later.');
+                })
+                .finally(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Submit Feedback";
+                });
+        });
+    </script>
+</body>
+</html>
